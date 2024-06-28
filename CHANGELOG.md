@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/LupuC/elixio_uninstaller/compare/v1.3.0...v1.4.0) (2024-06-28)
+
+
+### Features
+
+* rp debug and new feats ([b8853ac](https://github.com/LupuC/elixio_uninstaller/commit/b8853ac87223fd495dc8e6dcd0b94655a22dd1ea))
+* rp debug and new feats ([2905da1](https://github.com/LupuC/elixio_uninstaller/commit/2905da1b6e464012d0590931bd8289d4bb60c803))
+* rp debug and new feats ([8a59131](https://github.com/LupuC/elixio_uninstaller/commit/8a59131ffff2c2614ec9e0d79cdedf410cdb2652))
+* rp debug and new feats ([dfc5887](https://github.com/LupuC/elixio_uninstaller/commit/dfc5887012c90fb1f49d81501b65ec036d4a8eba))
+* rp debug and new feats ([4beaf51](https://github.com/LupuC/elixio_uninstaller/commit/4beaf5185cf4d052a71c4b3acc77924b5b6ebcc2))
+* rp debug and new feats ([9e014c6](https://github.com/LupuC/elixio_uninstaller/commit/9e014c6572900ccf82565df2e41ac85d4a31d313))
+* rp debug and new feats ([9a7e73b](https://github.com/LupuC/elixio_uninstaller/commit/9a7e73b4b4cb67e73b97c31bc261d5830d453631))
+
 ## [1.3.0](https://github.com/LupuC/elixio_uninstaller/compare/v1.2.0...v1.3.0) (2024-06-28)
 
 
