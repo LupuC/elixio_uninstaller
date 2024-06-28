@@ -13,7 +13,11 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Check out your repository
+
+      - name: Run release-please
+        uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
@@ -31,8 +35,8 @@ jobs:
         run: |
           latest_version=${{ steps.get_release.outputs.latest_version }}
           echo '{"name": "Elixio Uninstaller", "version": "'$latest_version'"}' > config.json
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
           git add config.json
           git commit -m "Update version to $latest_version"
-          git push
+          git push origin main
