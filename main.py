@@ -7,6 +7,8 @@ import customtkinter  # Custom module for tkinter widgets and appearance
 import subprocess  # For executing subprocesses
 import requests
 
+#release update
+
 app_version = "1.0"
 def check_for_updates():
     repo_owner = 'LupuC'
