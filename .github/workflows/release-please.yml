@@ -55,10 +55,13 @@ jobs:
         run: pip install pyinstaller
 
       - name: Build executable
-        run: pyinstaller --onefile main.py
+        
         # Add debug output to verify the contents of the dist directory
-        if: success()
-        run: ls dist
+        run: |
+          pyinstaller --onefile main.py
+          if success(); then:
+          ls dist
+          
 
       - name: Prepare release files
         run: |
