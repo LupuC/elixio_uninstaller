@@ -1,3 +1,5 @@
+name: release-please
+
 on:
   push:
     branches:
@@ -7,18 +9,30 @@ permissions:
   contents: write
   pull-requests: write
 
-name: release-please
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          # this assumes that you have created a personal access token
-          # (PAT) and configured it as a GitHub action secret named
-          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
           token: ${{ secrets.GITHUB_TOKEN }}
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
           release-type: simple
+
+      - name: Get latest release version
+        id: get_release
+        run: |
+          repo_owner='LupuC'
+          repo_name='elixio_uninstaller'
+          url="https://api.github.com/repos/${repo_owner}/${repo_name}/releases/latest"
+          latest_version=$(curl -s $url | jq -r '.tag_name')
+          echo ::set-output name=latest_version::${latest_version}
+
+      - name: Update config.json with latest version
+        run: |
+          latest_version=${{ steps.get_release.outputs.latest_version }}
+          echo '{"name": "Elixio Uninstaller", "version": "'$latest_version'"}' > config.json
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add config.json
+          git commit -m "Update version to $latest_version"
+          git push

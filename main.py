@@ -6,13 +6,41 @@ import threading  # For threading support
 import customtkinter  # Custom module for tkinter widgets and appearance
 import subprocess  # For executing subprocesses
 import requests
+import shutil
+import json
 
-#release update
+# Function to fetch application version from config.json
+def get_app_version():
+    with open('config.json') as config_file:
+        config = json.load(config_file)
+        return config['version']
 
-app_version = "1.0"
+# Example usage:
+app_version = get_app_version()
+print(f"Current version: {app_version}")
+
+repo_owner = 'LupuC'
+repo_name = 'elixio_uninstaller'
+
+# Function to download the updated application from GitHub
+def download_updated_app():
+    url = f'https://github.com/{repo_owner}/{repo_name}/releases/latest/download/elixio_uninstaller.exe'
+
+    try:
+        response = requests.get(url, stream=True)
+        if response.status_code == 200:
+            with open("elixio_uninstaller.exe", "wb") as f:
+                shutil.copyfileobj(response.raw, f)
+            return True
+        else:
+            messagebox.showerror("Download Error", f"Failed to download update: {response.status_code}")
+            return False
+    except Exception as e:
+        messagebox.showerror("Download Error", f"Failed to download update: {e}")
+        return False
+
 def check_for_updates():
-    repo_owner = 'LupuC'
-    repo_name = 'elixio_uninstaller'
+
     url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest'
 
     try:
@@ -23,7 +51,24 @@ def check_for_updates():
             current_version = app_version  # Replace with your actual version retrieval method
 
             if latest_version != current_version:
-                messagebox.showinfo("Update Available", f"A new version ({latest_version}) is available!")
+                response = messagebox.askyesno(
+                    "Update Available",
+                    f"New Version Available: {latest_version}\n"
+                    f"Current Version: {app_version}\n\n"
+                    "Do you want to update now?\n\n"
+                    "Click 'Yes' to download and install the update.\n"
+                    "Click 'No' to continue using the current version."
+                )
+
+                if response:
+                    download_updated_app()
+                    pass
+                else:
+                    # Handle user choice to not update
+                    pass
+
+
+
             else:
                 messagebox.showinfo("No Updates", "You are using the latest version.")
 
