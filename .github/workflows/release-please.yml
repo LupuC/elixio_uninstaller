@@ -51,6 +51,11 @@ jobs:
       - name: Check repository contents 2
         run: |
           ls -l ${GITHUB_WORKSPACE}
+
+      - name: Go to dist
+        run: |
+          cd dist
+          ls
           
       - name: Prepare release files
         run: |
