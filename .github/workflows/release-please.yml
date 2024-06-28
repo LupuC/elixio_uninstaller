@@ -40,3 +40,23 @@ jobs:
           git add config.json
           git commit -m "Update version to $latest_version"
           git push origin main
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build executable
+        run: pyinstaller --onefile --noconsole main.py
+
+      - name: Prepare release files
+        run: |
+          mv dist/main.exe elixio_uninstaller.exe  # Rename main.exe as needed
+          mkdir release
+          mv main.exe release/
+          cp config.json release/
+        working-directory: ${{ github.workspace }}
+
+      - name: Package release artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-artifact
+          path: release
