@@ -59,7 +59,7 @@ jobs:
           
       - name: Prepare release files
         run: |
-          mv dist/main.exe elixio_uninstaller.exe  # Rename main.exe as needed
+          mv dist/main elixio_uninstaller.exe  # Rename main.exe as needed
           mkdir release
           mv elixio_uninstaller.exe release/
           cp config.json release/
