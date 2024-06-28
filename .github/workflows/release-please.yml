@@ -72,8 +72,8 @@ jobs:
         run: |
           mv dist/main elixio_uninstaller.exe  # Rename main.exe as needed
           mkdir release
-          mv elixio_uninstaller.exe release/
-          cp config.json release/
+          mv elixio_uninstaller.exe refs/heads/main/
+          cp config.json refs/heads/main/
         working-directory: ${{ github.workspace }}
 
       - name: Check if update is needed and update config.json
@@ -91,9 +91,9 @@ jobs:
             echo "No update needed. Exiting gracefully."
           fi
           
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: release/elixio_uninstaller.exe
+      # - name: Upload binaries to release
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      #     file: release/elixio_uninstaller.exe
 
