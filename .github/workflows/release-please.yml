@@ -17,7 +17,7 @@ jobs:
           uses: Martin005/pyinstaller-action@v1.2.0
           with:
             python_ver: '3.12.4'
-            spec: 'main.spec'
+            spec: 'src/build.spec'
             upload_exe_with_name: 'test'
             options: --onefile, --name "test", --windowed, --noconsole
   release-please:
