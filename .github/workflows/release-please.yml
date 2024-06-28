@@ -1,21 +1,26 @@
-name: Release Workflow
+name: release-please
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
-  build:
+  release-please:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Check out your repository
 
-      - name: Compile Python script to .exe
-        run: |
-          pip install pyinstaller
-          pyinstaller --onefile main.py
+      - name: Run release-please
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: simple
 
       - name: Get latest release version
         id: get_release
@@ -26,31 +31,12 @@ jobs:
           latest_version=$(curl -s $url | jq -r '.tag_name')
           echo ::set-output name=latest_version::${latest_version}
 
-      - name: Create Release
-        id: create_release
-        uses: elgohr/Github-Release-Action@v5
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_release.outputs.latest_version }}
-          title: Release ${{ steps.get_release.outputs.latest_version }}
-
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/main.exe  # Adjust the path as per your .exe location
-          asset_name: elixio_uninstaller.exe
-          asset_content_type: application/octet-stream
-
-      - name: Upload config.json
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./config.json
-          asset_name: config.json
-          asset_content_type: application/json
+      - name: Update config.json with latest version
+        run: |
+          latest_version=${{ steps.get_release.outputs.latest_version }}
+          echo '{"name": "Elixio Uninstaller", "version": "'$latest_version'"}' > config.json
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add config.json
+          git commit -m "Update version to $latest_version"
+          git push origin main
