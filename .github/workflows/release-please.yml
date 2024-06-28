@@ -10,6 +10,16 @@ permissions:
   pull-requests: write
 
 jobs:
+  pyinstaller-build:
+      runs-on: <windows-latest>
+      steps:
+        - name: Create Executable
+          uses: Martin005/pyinstaller-action@v1.2.0
+          with:
+            python_ver: '3.12.4'
+            spec: 'main.spec'
+            upload_exe_with_name: 'test'
+            options: --onefile, --name "test", --windowed, --noconsole
   release-please:
     runs-on: ubuntu-latest
     steps:
@@ -41,12 +51,18 @@ jobs:
         run: |
           ls -l ${GITHUB_WORKSPACE}
 
-      - name: Build executable
-        run: |
-          pyinstaller --onefile --noconsole main.py
-          echo "done, checking files.."
-          ls dist
-          ls -l dist  # Debug: List contents of dist directory
+      # - name: Build executable
+      #   run: |
+      #     pyinstaller --onefile --noconsole main.py
+      #     echo "done, checking files.."
+      #     ls dist
+      #     ls -l dist  # Debug: List contents of dist directory
+      
+      - name: PyInstaller Action
+        uses: Martin005/pyinstaller-action@v1.2.0
+
+        
+
           
       - name: Check repository contents 2
         run: |
