@@ -45,7 +45,7 @@ https://github.com/LupuC/elixio_uninstaller/releases
 ## Known issues/ bugs:
 1. Filters only works 1 way (sorting from a>z, 0 to 9 etc)
 2. Total gigs from the bottom left, is not working properly
-3. Sometimes, the app won't start
+3. Sometimes,  when the app stars, it won't be on top of other apps.
 4. **IMPORTANT** The app will be removed from the list, even if you press "No" on uninstall confirmation.
 
 
