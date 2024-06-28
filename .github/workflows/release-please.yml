@@ -60,8 +60,11 @@ jobs:
       
 
 
+      - name: Package Application
+        uses: JackMcKew/pyinstaller-action-windows@v0.1.2
+        with:
+          path: dist
         
-
           
       - name: Check repository contents 2
         run: |
