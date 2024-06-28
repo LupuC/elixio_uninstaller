@@ -25,12 +25,16 @@ repo_name = 'elixio_uninstaller'
 # Function to download the updated application from GitHub
 def download_updated_app():
     url = f'https://github.com/{repo_owner}/{repo_name}/releases/latest/download/elixio_uninstaller.exe'
+    url2 = f'https://github.com/{repo_owner}/{repo_name}/releases/latest/download/config.json'
 
     try:
         response = requests.get(url, stream=True)
-        if response.status_code == 200:
+        response2 = requests.get(url2, stream=True)
+        if response.status_code == 200 and response2.status_code == 200:
             with open("elixio_uninstaller.exe", "wb") as f:
                 shutil.copyfileobj(response.raw, f)
+            with open("config.json", "wb") as f:
+                shutil.copyfileobj(response2.raw, f)
             return True
         else:
             messagebox.showerror("Download Error", f"Failed to download update: {response.status_code}")
