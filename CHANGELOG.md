@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/LupuC/elixio_uninstaller/compare/v1.4.0...v1.5.0) (2024-06-28)
+
+
+### Features
+
+* rp debug and new feats ([b3fbec4](https://github.com/LupuC/elixio_uninstaller/commit/b3fbec4921da25bf57485417d06413850e6fea9a))
+
 ## [1.4.0](https://github.com/LupuC/elixio_uninstaller/compare/v1.3.0...v1.4.0) (2024-06-28)
 
 
