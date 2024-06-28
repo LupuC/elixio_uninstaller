@@ -58,8 +58,7 @@ jobs:
       #     ls dist
       #     ls -l dist  # Debug: List contents of dist directory
       
-      - name: PyInstaller Action
-        uses: Martin005/pyinstaller-action@v1.2.0
+
 
         
 
