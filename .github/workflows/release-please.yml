@@ -65,6 +65,22 @@ jobs:
           cp config.json release/
         working-directory: ${{ github.workspace }}
 
+      - name: Check if update is needed and update config.json
+        run: |
+          latest_version=${{ steps.get_release.outputs.latest_version }}
+          current_version=$(cat config.json | jq -r '.version')
+          if [ "$latest_version" != "$current_version" ]; then
+            echo '{"name": "Elixio Uninstaller", "version": "'$latest_version'"}' > config.json
+            git config --global user.email "github-actions@github.com"
+            git config --global user.name "GitHub Actions"
+            git add config.json
+            git commit -m "Update version to $latest_version"
+            git push origin main
+          else
+            echo "No update needed. Exiting gracefully."
+          fi
+
+
       - name: Package release artifact
         uses: actions/upload-artifact@v4.3.3
         with:
