@@ -37,6 +37,15 @@ python main.py
 https://github.com/LupuC/elixio_uninstaller/releases
 ```
 
+## Screenshots
+
+![image](https://github.com/LupuC/elixio_uninstaller/assets/62475718/25a99f21-b4f9-4dcd-83ce-bcb8d8ae78a9)
+
+
+## Known issues/ bugs:
+1. Filters only works 1 way (sorting from a>z, 0 to 9 etc)
+2. Total gigs from the bottom left, is not working properly
+3. Sometimes, the app won't start
 
 
 ## How It Works
