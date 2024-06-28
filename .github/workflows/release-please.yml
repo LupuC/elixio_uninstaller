@@ -50,10 +50,13 @@ jobs:
       
 
 
-      - name: Package Application
-        uses: JackMcKew/pyinstaller-action-windows@v0.1.2
+      - name: Create Executable
+        uses: Martin005/pyinstaller-action@v1.2.0
         with:
-          path: main.py
+          python_ver: '3.12.4'
+          spec: 'main.spec'
+          upload_exe_with_name: 'test'
+          options: --onefile, --name "test", --windowed, 
         
           
       - name: Check repository contents 2
