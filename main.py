@@ -5,6 +5,32 @@ from datetime import datetime  # For date and time operations
 import threading  # For threading support
 import customtkinter  # Custom module for tkinter widgets and appearance
 import subprocess  # For executing subprocesses
+import requests
+
+app_version = "1.0"
+def check_for_updates():
+    repo_owner = 'LupuC'
+    repo_name = 'elixio_uninstaller'
+    url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest'
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            release_info = response.json()
+            latest_version = release_info['tag_name']  # Assuming tags are used for releases
+            current_version = app_version  # Replace with your actual version retrieval method
+
+            if latest_version != current_version:
+                messagebox.showinfo("Update Available", f"A new version ({latest_version}) is available!")
+            else:
+                messagebox.showinfo("No Updates", "You are using the latest version.")
+
+        else:
+            messagebox.showerror("Error", f"Failed to check for updates: {response.status_code}")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to check for updates: {e}")
+
+
 
 # Function to fetch installed applications from Windows Registry
 def get_installed_apps():
@@ -199,6 +225,9 @@ class LoadingIndicator(customtkinter.CTkLabel):
             self.index = (self.index + 1) % len(self.characters)
             self.after(100, self._animate)
 
+
+
+
 # Main function to initialize the application
 def main():
     global root, frame, treeview, vsb, loaded_info_label, loading_indicator, loaded_info_label2, context_menu, installed_apps
@@ -237,13 +266,15 @@ def main():
     loading_indicator.pack(side=tk.LEFT, padx=10, pady=5)
 
     # Create label to display version information
-    loaded_info_label2 = customtkinter.CTkLabel(root, text="1.0.1")
+    loaded_info_label2 = customtkinter.CTkLabel(root, text=app_version)
     loaded_info_label2.pack(side=tk.RIGHT, padx=10, pady=5)
 
     # Create right-click context menu for Treeview
     context_menu = tk.Menu(root, tearoff=False)
     context_menu.add_command(label="Uninstall", command=uninstall_selected)
     treeview.bind("<Button-3>", on_right_click)
+
+    check_for_updates()
 
     # Fetch and display installed applications
     fetch_data()
