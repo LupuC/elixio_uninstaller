@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.0](https://github.com/LupuC/elixio_uninstaller/compare/v1.1.0...v1.2.0) (2024-06-28)
+
+
+### Features
+
+* fix rp ([4582101](https://github.com/LupuC/elixio_uninstaller/commit/45821014faffc20511af785546d7338d44904c53))
+* fix rp ([ce880b2](https://github.com/LupuC/elixio_uninstaller/commit/ce880b2279aa8bccba449de7765a087eca5a6847))
+* latest rp working ([4ee2b0e](https://github.com/LupuC/elixio_uninstaller/commit/4ee2b0e406818cec863dddfe4dae3c5fc09a9738))
+* new rp config ([6be1b18](https://github.com/LupuC/elixio_uninstaller/commit/6be1b185d1296702541ced0e2a00a5a755b8ad61))
+
 ## [1.1.0](https://github.com/LupuC/elixio_uninstaller/compare/v1.0.0...v1.1.0) (2024-06-28)
 
 
