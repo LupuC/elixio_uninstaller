@@ -31,15 +31,14 @@ jobs:
           latest_version=$(curl -s $url | jq -r '.tag_name')
           echo ::set-output name=latest_version::${latest_version}
 
-          
 
-      - name: Install PyInstaller
-        run: pip install pyinstaller
+      # - name: Install PyInstaller
+      #   run: pip install pyinstaller
 
 
-      - name: Check repository contents
-        run: |
-          ls -l ${GITHUB_WORKSPACE}
+      # - name: Check repository contents
+      #   run: |
+      #     ls -l ${GITHUB_WORKSPACE}
 
       # - name: Build executable
       #   run: |
@@ -50,31 +49,31 @@ jobs:
       
 
 
-      - name: Create Executable
-        uses: Martin005/pyinstaller-action@v1.2.0
-        with:
-          python_ver: '3.12.4'
-          spec: 'main.spec'
-          upload_exe_with_name: 'test'
-          options: --onefile, --name "test", --windowed, 
+      # - name: Create Executable
+      #   uses: Martin005/pyinstaller-action@v1.2.0
+      #   with:
+      #     python_ver: '3.12.4'
+      #     spec: 'main.spec'
+      #     upload_exe_with_name: 'test'
+      #     options: --onefile, --name "test", --windowed, 
         
           
       - name: Check repository contents 2
         run: |
           ls -l ${GITHUB_WORKSPACE}
 
-      - name: Go to dist
-        run: |
-          cd dist
-          ls
+      # - name: Go to dist
+      #   run: |
+      #     cd dist
+      #     ls
           
-      - name: Prepare release files
-        run: |
-          mv dist/main elixio_uninstaller.exe  # Rename main.exe as needed
-          mkdir release
-          mv elixio_uninstaller.exe refs/heads/main/
-          cp config.json refs/heads/main/
-        working-directory: ${{ github.workspace }}
+      # - name: Prepare release files
+      #   run: |
+      #     mv dist/main elixio_uninstaller.exe  # Rename main.exe as needed
+      #     mkdir release
+      #     mv elixio_uninstaller.exe refs/heads/main/
+      #     cp config.json refs/heads/main/
+      #   working-directory: ${{ github.workspace }}
 
       - name: Check if update is needed and update config.json
         run: |
