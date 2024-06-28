@@ -28,20 +28,26 @@ def download_updated_app():
     url2 = f'https://github.com/{repo_owner}/{repo_name}/releases/latest/download/config.json'
 
     try:
-        response = requests.get(url, stream=True)
-        response2 = requests.get(url2, stream=True)
-        if response.status_code == 200 and response2.status_code == 200:
+        # Download elixio_uninstaller.exe
+        with requests.get(url, stream=True) as response:
+            response.raise_for_status()
             with open("elixio_uninstaller.exe", "wb") as f:
                 shutil.copyfileobj(response.raw, f)
-            with open("config.json", "wb") as f:
-                shutil.copyfileobj(response2.raw, f)
-            return True
-        else:
-            messagebox.showerror("Download Error", f"Failed to download update: {response.status_code}")
-            return False
-    except Exception as e:
-        messagebox.showerror("Download Error", f"Failed to download update: {e}")
+
+        # Download config.json
+        with requests.get(url2, stream=True) as response2:
+            response2.raise_for_status()
+            with open("config.json", "wb") as d:
+                shutil.copyfileobj(response2.raw, d)
+
+        return True
+    except requests.HTTPError as http_err:
+        messagebox.showerror("Download Error", f"HTTP error occurred: {http_err}")
         return False
+    except Exception as err:
+        messagebox.showerror("Download Error", f"Failed to download update: {err}")
+        return False
+
 
 def check_for_updates():
 
