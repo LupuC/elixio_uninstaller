@@ -79,10 +79,11 @@ jobs:
           else
             echo "No update needed. Exiting gracefully."
           fi
-
-
-      - name: Package release artifact
-        uses: actions/upload-artifact@v4.3.3
+          
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: release-artifact
-          path: release
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: release/elixio_uninstaller.exe
+          asset_name: elixio_uninstaller
+
