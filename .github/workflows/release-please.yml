@@ -1,26 +1,30 @@
-name: release-please
+name: Release Workflow
 
 on:
   push:
     branches:
       - main
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
-  release-please:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2  # Check out your repository
+        uses: actions/checkout@v2
 
-      - name: Run release-please
-        uses: googleapis/release-please-action@v4
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: simple
+          python-version: '3.x'  # Replace with your Python version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Compile Python script to .exe
+        run: |
+          pyinstaller --onefile main.py
 
       - name: Get latest release version
         id: get_release
@@ -31,12 +35,35 @@ jobs:
           latest_version=$(curl -s $url | jq -r '.tag_name')
           echo ::set-output name=latest_version::${latest_version}
 
-      - name: Update config.json with latest version
-        run: |
-          latest_version=${{ steps.get_release.outputs.latest_version }}
-          echo '{"name": "Elixio Uninstaller", "version": "'$latest_version'"}' > config.json
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add config.json
-          git commit -m "Update version to $latest_version"
-          git push origin main
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_release.outputs.latest_version }}
+          release_name: Release ${{ steps.get_release.outputs.latest_version }}
+          draft: false
+          prerelease: false
+
+      - name: Upload release asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/elixio_uninstaller.exe  # Adjust the path as per your .exe location
+          asset_name: elixio_uninstaller.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload config.json
+        id: upload-config
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./config.json
+          asset_name: config.json
+          asset_content_type: application/json
