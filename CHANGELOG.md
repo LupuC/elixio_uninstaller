@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/LupuC/elixio_uninstaller/compare/v1.5.0...v1.6.0) (2024-06-28)
+
+
+### Features
+
+* latest update ([dc3359d](https://github.com/LupuC/elixio_uninstaller/commit/dc3359d6f0308351d0b6dd2eae41d07b604e384b))
+
 ## [1.5.0](https://github.com/LupuC/elixio_uninstaller/compare/v1.4.0...v1.5.0) (2024-06-28)
 
 
