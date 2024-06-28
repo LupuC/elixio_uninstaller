@@ -44,8 +44,14 @@ jobs:
       - name: Build executable
         run: |
           pyinstaller --onefile --noconsole main.py
+          echo "done, checking files.."
           ls dist
-
+          ls -l dist  # Debug: List contents of dist directory
+          
+      - name: Check repository contents 2
+        run: |
+          ls -l ${GITHUB_WORKSPACE}
+          
       - name: Prepare release files
         run: |
           mv dist/main.exe elixio_uninstaller.exe  # Rename main.exe as needed
