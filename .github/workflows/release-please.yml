@@ -31,7 +31,17 @@ jobs:
           latest_version=$(curl -s $url | jq -r '.tag_name')
           echo ::set-output name=latest_version::${latest_version}
 
+      - name: Check if update is needed
+        run: |
+          latest_version=${{ steps.get_release.outputs.latest_version }}
+          current_version=$(cat config.json | jq -r '.version')
+          if [ "$latest_version" == "$current_version" ]; then
+            echo "No update needed. Exiting gracefully."
+            exit 0
+          fi
+
       - name: Update config.json with latest version
+        if: steps.get_release.outputs.latest_version != steps.get_release.outputs.current_version
         run: |
           latest_version=${{ steps.get_release.outputs.latest_version }}
           echo '{"name": "Elixio Uninstaller", "version": "'$latest_version'"}' > config.json
@@ -45,13 +55,16 @@ jobs:
         run: pip install pyinstaller
 
       - name: Build executable
-        run: pyinstaller --onefile --noconsole main.py
+        run: pyinstaller --onefile main.py
+        # Add debug output to verify the contents of the dist directory
+        if: success()
+        run: ls dist
 
       - name: Prepare release files
         run: |
           mv dist/main.exe elixio_uninstaller.exe  # Rename main.exe as needed
           mkdir release
-          mv main.exe release/
+          mv elixio_uninstaller.exe release/
           cp config.json release/
         working-directory: ${{ github.workspace }}
 
