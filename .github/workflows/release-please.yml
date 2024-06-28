@@ -10,16 +10,6 @@ permissions:
   pull-requests: write
 
 jobs:
-  pyinstaller-build:
-      runs-on: <windows-latest>
-      steps:
-        - name: Create Executable
-          uses: Martin005/pyinstaller-action@v1.2.0
-          with:
-            python_ver: '3.12.4'
-            spec: 'src/build.spec'
-            upload_exe_with_name: 'test'
-            options: --onefile, --name "test", --windowed, --noconsole
   release-please:
     runs-on: ubuntu-latest
     steps:
@@ -63,7 +53,7 @@ jobs:
       - name: Package Application
         uses: JackMcKew/pyinstaller-action-windows@v0.1.2
         with:
-          path: dist
+          path: main.py
         
           
       - name: Check repository contents 2
