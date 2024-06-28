@@ -44,7 +44,6 @@ jobs:
             git push origin main
           else
             echo "No update needed. Exiting gracefully."
-
       - name: Install PyInstaller and build executable
         run: |
           pip install pyinstaller
