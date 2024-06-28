@@ -31,7 +31,16 @@ jobs:
           latest_version=$(curl -s $url | jq -r '.tag_name')
           echo ::set-output name=latest_version::${latest_version}
 
-      - name: Check if update is needed and update config.json
+      - name: Check if update is needed
+        run: |
+          latest_version=${{ steps.get_release.outputs.latest_version }}
+          current_version=$(cat config.json | jq -r '.version')
+          if [ "$latest_version" == "$current_version" ]; then
+            echo "No update needed. Exiting gracefully."
+            exit 0
+          fi
+
+      - name: Update config.json with latest version
         run: |
           latest_version=${{ steps.get_release.outputs.latest_version }}
           current_version=$(cat config.json | jq -r '.version')
@@ -42,17 +51,17 @@ jobs:
             git add config.json
             git commit -m "Update version to $latest_version"
             git push origin main
-          else
-            echo "No update needed. Exiting gracefully."
-          fi
-      - name: Install PyInstaller and build executable
+          
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build executable
         run: |
-          pip install pyinstaller
-          pyinstaller --onefile main.py
-        # Debug output to check contents of dist directory
+          pyinstaller --onefile --noconsole main.py
           ls dist
 
-      - name: Prepare release files and package
+      - name: Prepare release files
         run: |
           mv dist/main.exe elixio_uninstaller.exe  # Rename main.exe as needed
           mkdir release
