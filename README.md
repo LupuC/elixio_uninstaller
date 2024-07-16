@@ -1,64 +1,63 @@
 # Elixio Uninstaller
 
-## Description
+## Overview
 
-Elixio Uninstaller is a Python application built with tkinter for GUI, aimed at managing and uninstalling installed applications on Windows systems.
+Elixio Uninstaller is a sophisticated Windows application management tool developed in Python. It provides a user-friendly interface for viewing, sorting, and uninstalling applications, leveraging the power of the Windows Registry for accurate system information.
 
-## Features
+## Key Features
 
-- **View Installed Applications**: Lists all installed applications fetched from Windows Registry.
-- **Sort and Filter**: Applications can be sorted by name, size, or installation date.
-- **Context Menu**: Right-click functionality to uninstall selected applications.
-- **Check for Updates**: Automatically checks GitHub for updates and prompts the user to update if a newer version is available.
-- **Custom Loading Indicator**: Provides visual feedback during data loading.
+- **Comprehensive Application Inventory**: Displays a detailed list of installed applications, sourced directly from the Windows Registry.
+- **Advanced Sorting and Filtering**: Enables efficient navigation through applications with customizable sorting by name, size, or installation date.
+- **Intuitive Uninstall Process**: Streamlines application removal via a convenient right-click context menu.
+- **Automatic Update Checks**: Implements GitHub integration for seamless version control and update notifications.
+- **Responsive User Interface**: Features a custom loading indicator for enhanced user experience during data retrieval.
 
-## Requirements
+## Technical Requirements
 
-- Python 3.7+
-- tkinter
-- requests
+- Python 3.7 or higher
+- tkinter library
+- requests library
 
-## Installation
-### Clonning the repo
+## Installation Guide
+
+### Option 1: Source Code Installation
+
 1. Clone the repository:
-```
-git clone https://github.com/LupuC/elixio_uninstaller.git
+   ```
+   git clone https://github.com/LupuC/elixio_uninstaller.git
+   cd elixio_uninstaller
+   ```
 
-cd elixio_uninstaller
-```
+2. Execute the application:
+   ```
+   python main.py
+   ```
 
-Run the application:
-```
-python main.py
-```
-### Dwnloading the exec
-2. Download the exec:
-```
-https://github.com/LupuC/elixio_uninstaller/releases
-```
+### Option 2: Executable Installation
 
-## Screenshots
+Download the latest executable from our [GitHub Releases page](https://github.com/LupuC/elixio_uninstaller/releases).
 
-![image](https://github.com/user-attachments/assets/4818b694-ea9d-4359-bfdd-6dd14da3524e)
+## Visual Preview
 
+![Elixio Uninstaller Interface](https://github.com/user-attachments/assets/4818b694-ea9d-4359-bfdd-6dd14da3524e)
 
-## Known issues/ bugs:
-1. The new update prompt isn't working properly
+## Current Limitations
 
+- The update notification system is currently undergoing refinement to ensure optimal functionality.
 
-## How It Works
+## Technical Architecture
 
-The application uses Python's tkinter library for the graphical interface and interacts with the Windows Registry to fetch installed application details. It includes functionality to check for updates from GitHub and allows uninstalling applications directly from the GUI.
+Elixio Uninstaller is built on Python's tkinter library for its graphical user interface. It interfaces with the Windows Registry to extract detailed information about installed applications. The application incorporates GitHub integration for version control and update management.
 
-## Contributing
+## Contribution Guidelines
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+We welcome contributions to enhance Elixio Uninstaller. Please fork the repository and submit pull requests for any improvements or bug fixes.
 
-## License
+## Licensing
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is distributed under the MIT License. For full details, please refer to the LICENSE file in the repository.
 
-## Acknowledgments
+## Acknowledgements
 
-- Custom tkinter widgets and appearance by customtkinter
-- Loading indicator design inspired by LoadingIndicator
+- The customtkinter library for enhanced widget functionality and appearance.
+- Inspiration for the loading indicator design drawn from the LoadingIndicator project.
