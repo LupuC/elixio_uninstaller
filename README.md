@@ -39,7 +39,7 @@ https://github.com/LupuC/elixio_uninstaller/releases
 
 ## Screenshots
 
-![image](https://github.com/LupuC/elixio_uninstaller/assets/62475718/25a99f21-b4f9-4dcd-83ce-bcb8d8ae78a9)
+![image](https://github.com/user-attachments/assets/4818b694-ea9d-4359-bfdd-6dd14da3524e)
 
 
 ## Known issues/ bugs:
