@@ -52,7 +52,7 @@ Elixio Uninstaller is a cool little app I whipped up in Python. It helps you see
 ### The "I just want to click things" way:
 
 1. Head over to: https://github.com/LupuC/elixio_uninstaller/releases
-2. Download the latest .exe file
+2. Download the latest .exe and .json (otherwise, it won't work) files
 3. Double-click and enjoy!
 
 ## What it looks like 📸
