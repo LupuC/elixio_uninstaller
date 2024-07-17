@@ -43,7 +43,9 @@ jobs:
           pip install pyinstaller customtkinter requests
 
       - name: Build executable
-        run: pyinstaller --onefile --noconsole --name elixio_uninstaller main.py
+        run: |
+          pyinstaller --onefile --noconsole --name elixio_uninstaller main.py
+          ls -R  # This will list all files and directories recursively
 
       - name: Check if update is needed and update config.json
         run: |
@@ -60,13 +62,14 @@ jobs:
             echo "No update needed. Exiting gracefully."
           fi
 
+
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         if: ${{ steps.release.outputs.release_created }}
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/elixio_uninstaller.exe
-          asset_name: elixio_uninstaller.exe
+          file: elixio_uninstaller
+          asset_name: elixio_uninstaller
           tag: ${{ steps.release.outputs.tag_name }}
           overwrite: true
 
