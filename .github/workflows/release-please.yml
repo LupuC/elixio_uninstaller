@@ -11,26 +11,11 @@ permissions:
 
 jobs:
   release-please:
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Run release-please
-        uses: googleapis/release-please-action@v4
-        id: release
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: simple
-
-      - name: Get latest release version
-        id: get_release
-        run: |
-          repo_owner='LupuC'
-          repo_name='elixio_uninstaller'
-          url="https://api.github.com/repos/${repo_owner}/${repo_name}/releases/latest"
-          latest_version=$(curl -s $url | jq -r '.tag_name')
-          echo ::set-output name=latest_version::${latest_version}
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -40,40 +25,65 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller customtkinter requests
+
       - name: Build executable
         run: |
           pyinstaller --onefile --noconsole --name elixio_uninstaller main.py
-          ls -R  # This will list all files and directories recursively
+          dir /s
+
+      - name: Get latest release version
+        id: get_release
+        run: |
+          $repo_owner='LupuC'
+          $repo_name='elixio_uninstaller'
+          $url="https://api.github.com/repos/${repo_owner}/${repo_name}/releases/latest"
+          $latest_version = (Invoke-RestMethod -Uri $url).tag_name
+          echo "::set-output name=latest_version::$latest_version"
+
       - name: Check if update is needed and update config.json
         run: |
-          latest_version=${{ steps.get_release.outputs.latest_version }}
-          current_version=$(cat config.json | jq -r '.version')
-          if [ "$latest_version" != "$current_version" ]; then
-            echo '{"name": "Elixio Uninstaller", "version": "'$latest_version'"}' > config.json
+          $latest_version="${{ steps.get_release.outputs.latest_version }}"
+          $current_version = (Get-Content config.json | ConvertFrom-Json).version
+          if ($latest_version -ne $current_version) {
+            @{name="Elixio Uninstaller"; version=$latest_version} | ConvertTo-Json | Set-Content config.json
             git config --global user.email "github-actions@github.com"
             git config --global user.name "GitHub Actions"
             git add config.json
             git commit -m "Update version to $latest_version"
             git push origin main
-          else
+          } else {
             echo "No update needed. Exiting gracefully."
-          fi
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        if: ${{ steps.release.outputs.release_created }}
+          }
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: elixio_uninstaller
-          asset_name: elixio_uninstaller
-          tag: ${{ steps.release.outputs.tag_name }}
-          overwrite: true
+          tag_name: ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          body: |
+            Automated release for commit ${{ github.sha }}
+          draft: false
+          prerelease: false
+
+      - name: Upload executable to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/elixio_uninstaller.exe
+          asset_name: elixio_uninstaller.exe
+          asset_content_type: application/octet-stream
 
       - name: Upload config.json to release
-        uses: svenstaro/upload-release-action@v2
-        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: config.json
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./config.json
           asset_name: config.json
-          tag: ${{ steps.release.outputs.tag_name }}
-          overwrite: true
+          asset_content_type: application/json
