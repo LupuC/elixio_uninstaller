@@ -14,10 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Check out your repository
+        uses: actions/checkout@v3
 
       - name: Run release-please
         uses: googleapis/release-please-action@v4
+        id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
@@ -31,49 +32,18 @@ jobs:
           latest_version=$(curl -s $url | jq -r '.tag_name')
           echo ::set-output name=latest_version::${latest_version}
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-      # - name: Install PyInstaller
-      #   run: pip install pyinstaller
-
-
-      # - name: Check repository contents
-      #   run: |
-      #     ls -l ${GITHUB_WORKSPACE}
-
-      # - name: Build executable
-      #   run: |
-      #     pyinstaller --onefile --noconsole main.py
-      #     echo "done, checking files.."
-      #     ls dist
-      #     ls -l dist  # Debug: List contents of dist directory
-      
-
-
-      # - name: Create Executable
-      #   uses: Martin005/pyinstaller-action@v1.2.0
-      #   with:
-      #     python_ver: '3.12.4'
-      #     spec: 'main.spec'
-      #     upload_exe_with_name: 'test'
-      #     options: --onefile, --name "test", --windowed, 
-        
-          
-      - name: Check repository contents 2
+      - name: Install dependencies
         run: |
-          ls -l ${GITHUB_WORKSPACE}
+          python -m pip install --upgrade pip
+          pip install pyinstaller customtkinter requests
 
-      # - name: Go to dist
-      #   run: |
-      #     cd dist
-      #     ls
-          
-      # - name: Prepare release files
-      #   run: |
-      #     mv dist/main elixio_uninstaller.exe  # Rename main.exe as needed
-      #     mkdir release
-      #     mv elixio_uninstaller.exe refs/heads/main/
-      #     cp config.json refs/heads/main/
-      #   working-directory: ${{ github.workspace }}
+      - name: Build executable
+        run: pyinstaller --onefile --noconsole --name elixio_uninstaller main.py
 
       - name: Check if update is needed and update config.json
         run: |
@@ -89,10 +59,23 @@ jobs:
           else
             echo "No update needed. Exiting gracefully."
           fi
-          
-      # - name: Upload binaries to release
-      #   uses: svenstaro/upload-release-action@v2
-      #   with:
-      #     repo_token: ${{ secrets.GITHUB_TOKEN }}
-      #     file: release/elixio_uninstaller.exe
 
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: dist/elixio_uninstaller.exe
+          asset_name: elixio_uninstaller.exe
+          tag: ${{ steps.release.outputs.tag_name }}
+          overwrite: true
+
+      - name: Upload config.json to release
+        uses: svenstaro/upload-release-action@v2
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: config.json
+          asset_name: config.json
+          tag: ${{ steps.release.outputs.tag_name }}
+          overwrite: true
