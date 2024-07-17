@@ -68,7 +68,7 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: elixio_uninstaller
+          file: dist/elixio_uninstaller
           asset_name: elixio_uninstaller
           tag: ${{ steps.release.outputs.tag_name }}
           overwrite: true
