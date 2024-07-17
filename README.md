@@ -61,7 +61,7 @@ Elixio Uninstaller is a cool little app I whipped up in Python. It helps you see
 
 ## Known quirks 🐛
 
-1. Sometimes it gets a bit confused about updates. We're working on teaching it to count better.
+If you find any, let me know.
 
 ## How it does its magic 🎩✨
 
