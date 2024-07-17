@@ -4,7 +4,7 @@ import customtkinter
 from .config import ConfigManager
 from .app_manager import AppManager
 from .updater import Updater
-
+import subprocess
 
 class ElixioUninstaller:
     def __init__(self):
@@ -190,7 +190,22 @@ class ElixioUninstaller:
                 uninstall_cmd = self.app_manager.get_uninstall_command(app_name)
                 if uninstall_cmd:
                     try:
-                        subprocess.Popen(uninstall_cmd, shell=True)
+                        # Split the command into the executable and its arguments
+                        cmd_parts = uninstall_cmd.split(None, 1)
+                        if len(cmd_parts) > 1:
+                            executable, args = cmd_parts
+                        else:
+                            executable, args = cmd_parts[0], ""
+
+                        # Ensure the executable path is quoted if it contains spaces
+                        if " " in executable and not (executable.startswith('"') and executable.endswith('"')):
+                            executable = f'"{executable}"'
+
+                        # Combine the quoted executable with its arguments
+                        full_command = f'{executable} {args}'
+
+                        # Run the command
+                        subprocess.Popen(full_command, shell=True)
                     except Exception as e:
                         messagebox.showerror("Error", f"Failed to uninstall {app_name}: {e}")
 
