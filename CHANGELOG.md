@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2](https://github.com/LupuC/elixio_uninstaller/compare/v1.7.1...v1.7.2) (2024-07-17)
+
+
+### Bug Fixes
+
+* **fix ver:** fix ver ([0bb1da3](https://github.com/LupuC/elixio_uninstaller/commit/0bb1da328e220c5d5ac601e8c1ac3cf308f69f20))
+
 ## [1.7.1](https://github.com/LupuC/elixio_uninstaller/compare/v1.7.0...v1.7.1) (2024-07-17)
 
 
