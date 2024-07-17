@@ -1,76 +1,65 @@
-name: release-please
+name: Build Workflow
 on:
   push:
-    branches:
-      - main
-permissions:
-  contents: write
-  pull-requests: write
+    branches: 
+      - main  # Assuming your main branch is named 'main'
+
 jobs:
-  release-build-upload:
-    runs-on: ubuntu-latest
+  build-windows:
+    runs-on: windows-2019
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        
-      - name: Run release-please
-        id: release
-        uses: google-github-actions/release-please-action@v3
-        with:
-          release-type: node
-          package-name: elixio_uninstaller
+      - name: Checkout
+        uses: actions/checkout@v1
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Install Python
+        uses: actions/setup-python@v1
         with:
-          python-version: '3.x'
+          python-version: '3.9'  # Using a more recent Python version
+          architecture: 'x64'
 
-      - name: Install dependencies
+      - name: Install requirements
         run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y wine wine32 xvfb
-          python -m pip install --upgrade pip
           pip install pyinstaller customtkinter requests
-          pip list
 
-      - name: Install Wine Gecko
+      - name: Run PyInstaller
         run: |
-          wget https://dl.winehq.org/wine/wine-gecko/2.47.2/wine-gecko-2.47.2-x86.msi
-          wine msiexec /i wine-gecko-2.47.2-x86.msi
+          pyinstaller --onefile --noconsole --name elixio_uninstaller.exe main.py
 
-      - name: Run Xvfb
-        run: Xvfb :99 -ac &
-
-      - name: Build executable
-        run: |
-          export DISPLAY=:99
-          wine pyinstaller --onefile --noconsole --name elixio_uninstaller.exe main.py
-          echo "Contents of current directory:"
-          ls -la
-          echo "Contents of dist directory:"
-          ls -la dist
-
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+      - uses: actions/upload-artifact@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/elixio_uninstaller.exe
-          asset_name: elixio_uninstaller.exe
-          tag: ${{ steps.release.outputs.tag_name }}
-          overwrite: true
+          name: Windows_elixio_uninstaller
+          path: dist/elixio_uninstaller.exe
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.head_commit.message }}
+          release_name: ${{ github.event.head_commit.message }}
+          body: |
+            Elixio Uninstaller Release
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.create_release.outputs.upload_url}}
+          asset_path: dist/elixio_uninstaller.exe
+          asset_name: Elixio-Uninstaller-Windows-amd64.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
 
       - name: Upload config.json to release
-        uses: svenstaro/upload-release-action@v2
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: config.json
+          upload_url: ${{steps.create_release.outputs.upload_url}}
+          asset_path: config.json
           asset_name: config.json
-          tag: ${{ steps.release.outputs.tag_name }}
-          overwrite: true
-
-      - name: Log final status
-        run: |
-          echo "Workflow completed. Check the logs above for details on each step."
-          echo "If the release was created, the binaries should now be uploaded."
-          echo "If no release was created, no uploads would have occurred."
+          asset_content_type: application/json
