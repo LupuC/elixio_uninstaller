@@ -63,6 +63,8 @@ Elixio Uninstaller is a cool little app I whipped up in Python. It helps you see
 
 If you find any, let me know.
 
+1. The uninstaller doesn't start the uninstall process on all the items that are shown (Important!)
+
 ## How it does its magic 🎩✨
 
 It's basically a nosy little program that digs through your Windows Registry (don't worry, it's allowed) to find all the apps you've got. Then it puts on a fancy tkinter suit to show you everything in a nice window. It can even check GitHub to see if it needs to update itself - pretty smart, huh?
