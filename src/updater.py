@@ -12,7 +12,7 @@ class Updater:
         self.repo_owner = 'LupuC'
         self.repo_name = 'elixio_uninstaller'
         self.api_url = f'https://api.github.com/repos/{self.repo_owner}/{self.repo_name}/releases/latest'
-
+#test
     def check_for_updates(self, root, prompt_update):
         threading.Thread(target=self._check_for_updates, args=(root, prompt_update), daemon=True).start()
 
