@@ -1,14 +1,11 @@
 name: release-please
-
 on:
   push:
     branches:
       - main
-
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
   release-build-upload:
     runs-on: ubuntu-latest
@@ -23,13 +20,6 @@ jobs:
           release-type: node
           package-name: elixio_uninstaller
 
-      - name: Log release-please outputs
-        run: |
-          echo "Release created: ${{ steps.release.outputs.release_created }}"
-          echo "Release name: ${{ steps.release.outputs.name }}"
-          echo "Tag name: ${{ steps.release.outputs.tag_name }}"
-          echo "Upload URL: ${{ steps.release.outputs.upload_url }}"
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -37,14 +27,24 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y wine
+          sudo apt-get install -y wine wine32 xvfb
           python -m pip install --upgrade pip
           pip install pyinstaller customtkinter requests
           pip list
 
+      - name: Install Wine Gecko
+        run: |
+          wget https://dl.winehq.org/wine/wine-gecko/2.47.2/wine-gecko-2.47.2-x86.msi
+          wine msiexec /i wine-gecko-2.47.2-x86.msi
+
+      - name: Run Xvfb
+        run: Xvfb :99 -ac &
+
       - name: Build executable
         run: |
+          export DISPLAY=:99
           wine pyinstaller --onefile --noconsole --name elixio_uninstaller.exe main.py
           echo "Contents of current directory:"
           ls -la
