@@ -1,67 +1,83 @@
-# Elixio Uninstaller
+# Elixio Uninstaller 🚀
 
-## Description
+Hey there! Welcome to Elixio Uninstaller, your new best friend for keeping your Windows PC clean and tidy. 😎
 
-Elixio Uninstaller is a Python application built with tkinter for GUI, aimed at managing and uninstalling installed applications on Windows systems.
+## What's this all about? 🤔
 
-## Features
+Elixio Uninstaller is a cool little app I whipped up in Python. It helps you see all the stuff installed on your Windows computer and lets you kick out the apps you don't want anymore. No more digging through control panel or settings - it's all right here!
 
-- **View Installed Applications**: Lists all installed applications fetched from Windows Registry.
-- **Sort and Filter**: Applications can be sorted by name, size, or installation date.
-- **Context Menu**: Right-click functionality to uninstall selected applications.
-- **Check for Updates**: Automatically checks GitHub for updates and prompts the user to update if a newer version is available.
-- **Custom Loading Indicator**: Provides visual feedback during data loading.
+## Cool stuff it can do 🌟
 
-## Requirements
+- Shows you all the apps chillin' on your PC
+- Let's you sort 'em however you like (by name, size, or when you installed 'em)
+- Right-click to yeet any app you don't want
+- Checks if there's a cooler, newer version of itself
+- Has a fancy loading bar so you're not left wondering what's happening
 
-- Python 3.7+
-- tkinter
-- requests
+## What you need to make it work 🛠️
 
-## Installation
-### Clonning the repo
-1. Clone the repository:
-```
-git clone https://github.com/LupuC/elixio_uninstaller.git
+- Python 3.7 or newer (cause we're not living in the stone age)
+- A bunch of Python libraries:
+  - tkinter (for making it look pretty)
+  - customtkinter (for making it look even prettier)
+  - requests (for chatting with the internet)
+  - winreg (for sneaking around the Windows registry)
+  - threading (for doing multiple things at once, like a boss)
+  - datetime (for knowing what day it is)
+  - subprocess (for running other programs)
+  - shutil (for moving files around)
+  - json (for reading config files)
+  - os and sys (for general Python goodness)
 
-cd elixio_uninstaller
-```
+## How to get it running 🏃‍♂️
 
-Run the application:
-```
-python main.py
-```
-### Dwnloading the exec
-2. Download the exec:
-```
-https://github.com/LupuC/elixio_uninstaller/releases
-```
+### The "I know code" way:
 
-## Screenshots
+1. Grab the code:
+   ```
+   git clone https://github.com/LupuC/elixio_uninstaller.git
+   cd elixio_uninstaller
+   ```
 
-![image](https://github.com/LupuC/elixio_uninstaller/assets/62475718/25a99f21-b4f9-4dcd-83ce-bcb8d8ae78a9)
+2. Install the extra stuff:
+   ```
+   pip install customtkinter requests
+   ```
 
+3. Fire it up:
+   ```
+   python main.py
+   ```
 
-## Known issues/ bugs:
-1. Filters only works 1 way (sorting from a>z, 0 to 9 etc)
-2. Total gigs from the bottom left, is not working properly
-3. Sometimes,  when the app stars, it won't be on top of other apps.
-4. **IMPORTANT** The app will be removed from the list, even if you press "No" on uninstall confirmation.
+### The "I just want to click things" way:
 
+1. Head over to: https://github.com/LupuC/elixio_uninstaller/releases
+2. Download the latest .exe and .json (otherwise, it won't work) files
+3. Double-click and enjoy!
 
-## How It Works
+## What it looks like 📸
 
-The application uses Python's tkinter library for the graphical interface and interacts with the Windows Registry to fetch installed application details. It includes functionality to check for updates from GitHub and allows uninstalling applications directly from the GUI.
+![Elixio in action](https://github.com/user-attachments/assets/4818b694-ea9d-4359-bfdd-6dd14da3524e)
 
-## Contributing
+## Known quirks 🐛
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+1. Sometimes it gets a bit confused about updates. We're working on teaching it to count better.
 
-## License
+## How it does its magic 🎩✨
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+It's basically a nosy little program that digs through your Windows Registry (don't worry, it's allowed) to find all the apps you've got. Then it puts on a fancy tkinter suit to show you everything in a nice window. It can even check GitHub to see if it needs to update itself - pretty smart, huh?
 
-## Acknowledgments
+## Wanna help make it cooler? 🛠️
 
-- Custom tkinter widgets and appearance by customtkinter
-- Loading indicator design inspired by LoadingIndicator
+Hey, if you've got ideas to make this even more awesome, go for it! Fork the repo, make it better, and show me what you've got. I'm always up for learning new tricks!
+
+## Legal mumbo-jumbo 📜
+
+This project is under the MIT License - basically, do whatever you want with it, just don't blame me if something goes wrong. Check out the LICENSE file for the boring details.
+
+## Shoutouts 🙌
+
+- Big thanks to the customtkinter folks for making tkinter look like it's from this century
+- Whoever came up with the idea of loading bars - you're the real MVP
+
+Now go forth and uninstall with power! 💪🖥️
