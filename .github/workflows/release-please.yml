@@ -10,24 +10,25 @@ permissions:
   pull-requests: write
 
 jobs:
-  release-please:
+  release-build-upload:
     runs-on: ubuntu-latest
-    outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      - uses: google-github-actions/release-please-action@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Run release-please
         id: release
+        uses: google-github-actions/release-please-action@v3
         with:
           release-type: node
           package-name: elixio_uninstaller
 
-  build-and-release:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+      - name: Log release-please outputs
+        run: |
+          echo "Release created: ${{ steps.release.outputs.release_created }}"
+          echo "Release name: ${{ steps.release.outputs.name }}"
+          echo "Tag name: ${{ steps.release.outputs.tag_name }}"
+          echo "Upload URL: ${{ steps.release.outputs.upload_url }}"
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -40,11 +41,15 @@ jobs:
           sudo apt-get install -y wine
           python -m pip install --upgrade pip
           pip install pyinstaller customtkinter requests
+          pip list
 
       - name: Build executable
         run: |
           wine pyinstaller --onefile --noconsole --name elixio_uninstaller.exe main.py
-          ls -R dist
+          echo "Contents of current directory:"
+          ls -la
+          echo "Contents of dist directory:"
+          ls -la dist
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
@@ -52,7 +57,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/elixio_uninstaller.exe
           asset_name: elixio_uninstaller.exe
-          tag: ${{ needs.release-please.outputs.tag_name }}
+          tag: ${{ steps.release.outputs.tag_name }}
           overwrite: true
 
       - name: Upload config.json to release
@@ -61,5 +66,11 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: config.json
           asset_name: config.json
-          tag: ${{ needs.release-please.outputs.tag_name }}
+          tag: ${{ steps.release.outputs.tag_name }}
           overwrite: true
+
+      - name: Log final status
+        run: |
+          echo "Workflow completed. Check the logs above for details on each step."
+          echo "If the release was created, the binaries should now be uploaded."
+          echo "If no release was created, no uploads would have occurred."
